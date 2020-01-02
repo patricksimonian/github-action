@@ -236,11 +236,11 @@ const buildAppMaybe = () => {
   if (!buildApp) {
     return
   }
-
+  const opts = { cwd: cypressCommandOptions.cwd };
   core.debug(`building application using "${buildApp}"`)
 
   // TODO: allow specifying custom working folder?
-  return exec.exec(buildApp)
+  return exec.exec(buildApp, [], opts)
 }
 
 const startServerMaybe = () => {
@@ -265,7 +265,7 @@ const startServerMaybe = () => {
   )
   console.log(
     'current working directory "%s"',
-    process.cwd()
+    workingDirectory
   )
 
   const args = cliParser.parse(startCommand)
@@ -283,8 +283,9 @@ const startServerMaybe = () => {
     )
     core.debug('without waiting for the promise to resolve')
 
-    // TODO specify working directory when running the server?
-    exec.exec(quote(toolPath), toolArguments)
+    const opts = { cwd: cypressCommandOptions.cwd }
+
+    exec.exec(quote(toolPath), toolArguments, opts)
   })
 }
 
